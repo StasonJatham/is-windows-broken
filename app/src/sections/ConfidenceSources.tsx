@@ -8,11 +8,9 @@ interface ConfidenceSourcesProps {
   confidence: number;
   generatedAt: string;
   sourceDataDate: string | null;
-  latestPatchDay: string | null;
-  activeWindow: boolean;
 }
 
-export function ConfidenceSources({ confidence, generatedAt, sourceDataDate, latestPatchDay, activeWindow }: ConfidenceSourcesProps) {
+export function ConfidenceSources({ confidence, generatedAt, sourceDataDate }: ConfidenceSourcesProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -174,44 +172,6 @@ export function ConfidenceSources({ confidence, generatedAt, sourceDataDate, lat
           </span>
         </div>
 
-        <div
-          className="confidence-card bg-card-surface"
-          style={{
-            borderRadius: 'var(--card-radius)',
-            padding: 'var(--card-pad)',
-            opacity: 0,
-          }}
-        >
-          <span
-            className="font-body block"
-            style={{
-              fontSize: '0.75rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              color: 'var(--text-muted)',
-            }}
-          >
-            Patch Window
-          </span>
-          <span
-            className="font-display font-bold block mt-1"
-            style={{
-              fontSize: '1.15rem',
-              color: 'var(--text-primary)',
-            }}
-          >
-            {latestPatchDay ?? 'Not set'}
-          </span>
-          <span
-            className="font-body block mt-2"
-            style={{
-              fontSize: '0.8125rem',
-              color: activeWindow ? 'var(--amber-text)' : 'var(--text-muted)',
-            }}
-          >
-            {activeWindow ? 'Inside the active patch window' : 'Outside the active patch window'}
-          </span>
-        </div>
       </div>
     </section>
   );

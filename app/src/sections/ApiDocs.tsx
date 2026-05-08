@@ -193,7 +193,7 @@ function CopyButton({ code }: { code: string }) {
         borderRadius: '6px',
         border: '1px solid var(--border-card)',
         background: copied ? 'var(--green-soft)' : 'var(--bg-code-header)',
-        color: copied ? 'var(--green-text)' : 'var(--text-muted)',
+        color: copied ? 'var(--green-text)' : 'var(--code-header-text)',
         cursor: 'pointer',
       }}
       aria-label={copied ? 'Copied!' : 'Copy to clipboard'}
@@ -261,7 +261,7 @@ export function ApiDocs() {
         marginTop: 'var(--section-gap)',
         marginBottom: '4rem',
         padding: `0 var(--page-pad-x)`,
-        maxWidth: '1180px',
+        maxWidth: '920px',
         marginLeft: 'auto',
         marginRight: 'auto',
       }}
@@ -290,8 +290,7 @@ export function ApiDocs() {
 
       <div
         ref={blocksRef}
-        className="mt-6 grid gap-4"
-        style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}
+        className="mt-6 flex flex-col gap-4"
       >
         {examples.map((example) => (
           <div
@@ -324,7 +323,7 @@ export function ApiDocs() {
                   className="font-code"
                   style={{
                     fontSize: '0.75rem',
-                    color: 'var(--text-muted)',
+                    color: 'var(--code-header-text)',
                     marginLeft: '4px',
                   }}
                 >

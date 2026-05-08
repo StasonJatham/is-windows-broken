@@ -80,8 +80,6 @@ function App() {
             confidence={overall.confidence}
             generatedAt={primaryItem.generatedAt}
             sourceDataDate={sourceDataDate}
-            latestPatchDay={primaryItem.patch?.patchDay ?? null}
-            activeWindow={primaryItem.patch?.activeWindow ?? false}
           />
 
           <ApiDocs />
