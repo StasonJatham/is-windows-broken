@@ -38,6 +38,128 @@ if data['ok'] and data['items']:
   },
 ];
 
+type CodeLanguage = 'bash' | 'javascript' | 'python';
+
+type CodeToken = {
+  value: string;
+  kind: 'plain' | 'keyword' | 'string' | 'comment' | 'number' | 'operator' | 'function' | 'property';
+};
+
+const languageByLabel: Record<string, CodeLanguage> = {
+  cURL: 'bash',
+  JavaScript: 'javascript',
+  Python: 'python',
+};
+
+const keywordMap: Record<CodeLanguage, string[]> = {
+  bash: ['curl'],
+  javascript: ['const', 'await', 'if', 'true', 'false', 'null'],
+  python: ['from', 'import', 'if', 'for', 'in', 'True', 'False', 'None'],
+};
+
+function tokenizeLine(line: string, language: CodeLanguage): CodeToken[] {
+  const keywords = new Set(keywordMap[language]);
+  const tokens: CodeToken[] = [];
+  let index = 0;
+
+  const pushPlain = (value: string) => {
+    if (value) tokens.push({ value, kind: 'plain' });
+  };
+
+  while (index < line.length) {
+    const rest = line.slice(index);
+
+    if (language === 'python' && rest.startsWith('#')) {
+      tokens.push({ value: rest, kind: 'comment' });
+      break;
+    }
+    if (language === 'javascript' && rest.startsWith('//')) {
+      tokens.push({ value: rest, kind: 'comment' });
+      break;
+    }
+
+    const stringMatch = rest.match(/^(`[^`]*`|'[^']*'|"[^"]*")/);
+    if (stringMatch) {
+      tokens.push({ value: stringMatch[0], kind: 'string' });
+      index += stringMatch[0].length;
+      continue;
+    }
+
+    const numberMatch = rest.match(/^\d+(\.\d+)?/);
+    if (numberMatch) {
+      tokens.push({ value: numberMatch[0], kind: 'number' });
+      index += numberMatch[0].length;
+      continue;
+    }
+
+    const propertyMatch = rest.match(/^\.[A-Za-z_][A-Za-z0-9_]*/);
+    if (propertyMatch) {
+      tokens.push({ value: propertyMatch[0], kind: 'property' });
+      index += propertyMatch[0].length;
+      continue;
+    }
+
+    const functionMatch = rest.match(/^[A-Za-z_][A-Za-z0-9_]*(?=\()/);
+    if (functionMatch) {
+      tokens.push({ value: functionMatch[0], kind: 'function' });
+      index += functionMatch[0].length;
+      continue;
+    }
+
+    const wordMatch = rest.match(/^[A-Za-z_][A-Za-z0-9_]*/);
+    if (wordMatch) {
+      const value = wordMatch[0];
+      tokens.push({ value, kind: keywords.has(value) ? 'keyword' : 'plain' });
+      index += value.length;
+      continue;
+    }
+
+    const operatorMatch = rest.match(/^(=>|===|!==|==|!=|>=|<=|=|\+|-|\||:|\[|\]|\{|\}|\(|\)|,)/);
+    if (operatorMatch) {
+      tokens.push({ value: operatorMatch[0], kind: 'operator' });
+      index += operatorMatch[0].length;
+      continue;
+    }
+
+    pushPlain(rest[0]);
+    index += 1;
+  }
+
+  return tokens;
+}
+
+function HighlightedCode({ code, language }: { code: string; language: CodeLanguage }) {
+  const lines = code.split('\n');
+  const tokenColor: Record<CodeToken['kind'], string> = {
+    plain: 'var(--text-on-dark)',
+    keyword: 'var(--code-keyword)',
+    string: 'var(--code-string)',
+    comment: 'var(--code-comment)',
+    number: 'var(--code-number)',
+    operator: 'var(--code-operator)',
+    function: 'var(--code-function)',
+    property: 'var(--code-property)',
+  };
+
+  return (
+    <code>
+      {lines.map((line, lineIndex) => (
+        <span key={`${language}-${lineIndex}`} className="block">
+          {tokenizeLine(line, language).map((token, tokenIndex) => (
+            <span
+              key={`${language}-${lineIndex}-${tokenIndex}`}
+              style={{ color: tokenColor[token.kind] }}
+            >
+              {token.value}
+            </span>
+          ))}
+          {lineIndex < lines.length - 1 ? '\n' : ''}
+        </span>
+      ))}
+    </code>
+  );
+}
+
 function CopyButton({ code }: { code: string }) {
   const [copied, setCopied] = useState(false);
 
@@ -139,7 +261,7 @@ export function ApiDocs() {
         marginTop: 'var(--section-gap)',
         marginBottom: '4rem',
         padding: `0 var(--page-pad-x)`,
-        maxWidth: '720px',
+        maxWidth: '1180px',
         marginLeft: 'auto',
         marginRight: 'auto',
       }}
@@ -166,7 +288,11 @@ export function ApiDocs() {
         The public endpoint returns the last 10 cached patch analyses. The site renders the newest item, and your tools can do the same.
       </p>
 
-      <div ref={blocksRef} className="mt-6 flex flex-col gap-4">
+      <div
+        ref={blocksRef}
+        className="mt-6 grid gap-4"
+        style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}
+      >
         {examples.map((example) => (
           <div
             key={example.label}
@@ -217,9 +343,13 @@ export function ApiDocs() {
                   lineHeight: 1.7,
                   margin: 0,
                   color: 'var(--text-on-dark)',
+                  whiteSpace: 'pre',
                 }}
               >
-                <code>{example.code}</code>
+                <HighlightedCode
+                  code={example.code}
+                  language={languageByLabel[example.label]}
+                />
               </pre>
             </div>
           </div>
