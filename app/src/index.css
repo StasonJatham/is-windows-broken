@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light mode (default) - Microsoft-inspired */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #f3f4f6;
+    --bg-card: #ffffff;
+    --bg-code: #1e1e1e;
+    --bg-code-header: #2d2d2d;
+
+    --text-primary: #1a1a1a;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --text-on-dark: #e4e4e7;
+
+    --border-light: #e2e8f0;
+    --border-medium: #cbd5e1;
+    --border-card: #e2e8f0;
+
+    --accent-blue: #0078d4;
+    --accent-blue-hover: #106ebe;
+    --accent-blue-soft: rgba(0, 120, 212, 0.08);
+
+    --green: #107c10;
+    --green-soft: rgba(16, 124, 16, 0.08);
+    --green-glow: rgba(16, 124, 16, 0.12);
+    --green-text: #0e700e;
+
+    --red: #d13438;
+    --red-soft: rgba(209, 52, 56, 0.08);
+    --red-glow: rgba(209, 52, 56, 0.12);
+    --red-text: #a4262c;
+
+    --amber: #ffc107;
+    --amber-soft: rgba(255, 193, 7, 0.08);
+    --amber-glow: rgba(255, 193, 7, 0.14);
+    --amber-text: #b38600;
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+    --shadow-card-hover: 0 4px 6px rgba(0, 0, 0, 0.06), 0 10px 24px rgba(0, 0, 0, 0.08);
+
+    --page-pad-x: clamp(1.25rem, 6vw, 4rem);
+    --section-gap: clamp(3rem, 8vh, 5rem);
+    --card-pad: 1.5rem;
+    --card-radius: 12px;
+    --badge-radius: 9999px;
+
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 206 100% 42%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 210 20% 96%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 206 100% 42%;
+    --radius: 0.75rem;
+  }
+
+  [data-theme="dark"] {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #1e293b;
+    --bg-card: #1e293b;
+    --bg-code: #0d1117;
+    --bg-code-header: #161b22;
+
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --text-on-dark: #e4e4e7;
+
+    --border-light: #334155;
+    --border-medium: #475569;
+    --border-card: #334155;
+
+    --accent-blue: #60a5fa;
+    --accent-blue-hover: #93c5fd;
+    --accent-blue-soft: rgba(96, 165, 250, 0.12);
+
+    --green: #6ee7b7;
+    --green-soft: rgba(110, 231, 183, 0.12);
+    --green-glow: rgba(110, 231, 183, 0.15);
+    --green-text: #6ee7b7;
+
+    --red: #f87171;
+    --red-soft: rgba(248, 113, 113, 0.12);
+    --red-glow: rgba(248, 113, 113, 0.15);
+    --red-text: #f87171;
+
+    --amber: #fbbf24;
+    --amber-soft: rgba(251, 191, 36, 0.12);
+    --amber-glow: rgba(251, 191, 36, 0.16);
+    --amber-text: #fbbf24;
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
+    --shadow-card-hover: 0 4px 6px rgba(0, 0, 0, 0.3), 0 10px 24px rgba(0, 0, 0, 0.25);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #1e293b;
+      --bg-card: #1e293b;
+      --bg-code: #0d1117;
+      --bg-code-header: #161b22;
+
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --text-on-dark: #e4e4e7;
+
+      --border-light: #334155;
+      --border-medium: #475569;
+      --border-card: #334155;
+
+      --accent-blue: #60a5fa;
+      --accent-blue-hover: #93c5fd;
+      --accent-blue-soft: rgba(96, 165, 250, 0.12);
+
+      --green: #6ee7b7;
+      --green-soft: rgba(110, 231, 183, 0.12);
+      --green-glow: rgba(110, 231, 183, 0.15);
+      --green-text: #6ee7b7;
+
+      --red: #f87171;
+      --red-soft: rgba(248, 113, 113, 0.12);
+      --red-glow: rgba(248, 113, 113, 0.15);
+      --red-text: #f87171;
+
+      --amber: #fbbf24;
+      --amber-soft: rgba(251, 191, 36, 0.12);
+      --amber-glow: rgba(251, 191, 36, 0.16);
+      --amber-text: #fbbf24;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+      --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
+      --shadow-card-hover: 0 4px 6px rgba(0, 0, 0, 0.3), 0 10px 24px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: "Segoe UI Variable", "Segoe UI", "Inter", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  * {
+    border-color: var(--border-card);
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: "Segoe UI Variable", "Segoe UI", "Inter", system-ui, sans-serif;
+  }
+
+  .font-body {
+    font-family: "Segoe UI Variable", "Segoe UI", "Inter", system-ui, sans-serif;
+  }
+
+  .font-code {
+    font-family: "Cascadia Code", "JetBrains Mono", "Fira Code", "SF Mono", monospace;
+  }
+
+  .bg-card-surface {
+    background: var(--bg-card);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-card);
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+
+  .bg-card-surface:hover {
+    box-shadow: var(--shadow-card-hover);
+    border-color: var(--border-medium);
+  }
+
+  .text-primary-token {
+    color: var(--text-primary);
+  }
+
+  .text-secondary-token {
+    color: var(--text-secondary);
+  }
+
+  .text-muted-token {
+    color: var(--text-muted);
+  }
+
+  .verdict-glow-green {
+    background: radial-gradient(circle, var(--green-glow) 0%, transparent 70%);
+  }
+
+  .verdict-glow-red {
+    background: radial-gradient(circle, var(--red-glow) 0%, transparent 70%);
+  }
+
+  .verdict-glow-amber {
+    background: radial-gradient(circle, var(--amber-glow) 0%, transparent 70%);
+  }
+}
