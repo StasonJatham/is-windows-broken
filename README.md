@@ -1,29 +1,37 @@
 # is-windows-broken
 
-Public Windows patch-readiness viewer backed by a cached JSON API.
+[![API Status](https://img.shields.io/website?url=https%3A%2F%2Fapi.is-windows-broken.com%2Fapi%2Fv1%2Fpatch-status&label=API)](https://api.is-windows-broken.com/api/v1/patch-status)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fis-windows-broken.com&label=website)](https://is-windows-broken.com)
+
+Patch Tuesday readiness for Windows Server and Windows 11. `is-windows-broken` tracks Microsoft release-health data and publishes a cached go/no-go view for deciding whether it is safe to patch.
 
 ![is-windows-broken preview](./app/public/is-win-broke-preview.webp)
 
-## Live
+## Website
 
-- Site: `https://is-windows-broken.com`
-- API: `https://api.is-windows-broken.com/api/v1/patch-status`
+- Website: [https://is-windows-broken.com](https://is-windows-broken.com)
+- API: [https://api.is-windows-broken.com/api/v1/patch-status](https://api.is-windows-broken.com/api/v1/patch-status)
 
-## What It Shows
+## What It Does
 
-The site displays the latest cached patch assessment for tracked Windows releases, including:
+The site displays the newest cached patch assessment for tracked Windows releases:
 
-- overall status
-- short summary
-- confidence
-- per-version status
-- last update time
+- overall patch status
+- short operational summary
+- confidence score
+- per-version Windows status
+- analysis run date
+- Microsoft source-page date
 
-The public API returns the latest 10 cached runs. The frontend renders the newest item.
+The public API returns the latest 10 cached runs. The frontend renders the newest entry.
+
+Tracked releases currently include Windows Server 2022, Windows Server 2025, and major Windows 11 release-health pages.
 
 ## Public API
 
-`GET /api/v1/patch-status`
+```text
+GET https://api.is-windows-broken.com/api/v1/patch-status
+```
 
 Example:
 
@@ -65,6 +73,12 @@ Response shape:
   ]
 }
 ```
+
+## How It Works
+
+The backend periodically fetches Microsoft Windows release-health pages and supplemental Windows admin news, summarizes the evidence through an asynchronous Batch API workflow, and stores the result as a small cached JSON history.
+
+The public website never calls the model directly. It only reads the cached API response, which keeps the page fast, stable, and cheap to serve.
 
 ## Local Development
 
