@@ -2,6 +2,8 @@
 
 Public Windows patch-readiness viewer backed by a cached JSON API.
 
+![is-windows-broken preview](./is-win-broke-preview.webp)
+
 ## Live
 
 - Site: `https://is-windows-broken.com`
