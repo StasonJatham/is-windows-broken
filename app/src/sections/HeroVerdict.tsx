@@ -169,7 +169,7 @@ export function HeroVerdict({ shouldBlockPatch, dataDate, isLoading, isUnavailab
             opacity: 0,
           }}
         >
-          as of {formattedDate}
+          analysis run on {formattedDate}
         </p>
       )}
 

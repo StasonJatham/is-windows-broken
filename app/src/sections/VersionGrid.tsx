@@ -172,7 +172,7 @@ export function VersionGrid({ versions }: VersionGridProps) {
                       color: 'var(--text-muted)',
                     }}
                   >
-                    {version.data_date}
+                    Source: {version.data_date}
                   </span>
                 </div>
               </article>

@@ -7,11 +7,12 @@ gsap.registerPlugin(ScrollTrigger);
 interface ConfidenceSourcesProps {
   confidence: number;
   generatedAt: string;
+  sourceDataDate: string | null;
   latestPatchDay: string | null;
   activeWindow: boolean;
 }
 
-export function ConfidenceSources({ confidence, generatedAt, latestPatchDay, activeWindow }: ConfidenceSourcesProps) {
+export function ConfidenceSources({ confidence, generatedAt, sourceDataDate, latestPatchDay, activeWindow }: ConfidenceSourcesProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -114,7 +115,7 @@ export function ConfidenceSources({ confidence, generatedAt, latestPatchDay, act
               color: 'var(--text-muted)',
             }}
           >
-            Updated
+            Analysis Run
           </span>
           <span
             className="font-display font-bold block mt-1"
@@ -131,6 +132,45 @@ export function ConfidenceSources({ confidence, generatedAt, latestPatchDay, act
               minute: '2-digit',
               timeZone: 'Europe/Berlin',
             })}
+          </span>
+        </div>
+
+        <div
+          className="confidence-card bg-card-surface"
+          style={{
+            borderRadius: 'var(--card-radius)',
+            padding: 'var(--card-pad)',
+            opacity: 0,
+          }}
+        >
+          <span
+            className="font-body block"
+            style={{
+              fontSize: '0.75rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              color: 'var(--text-muted)',
+            }}
+          >
+            Source Pages
+          </span>
+          <span
+            className="font-display font-bold block mt-1"
+            style={{
+              fontSize: '1.15rem',
+              color: 'var(--text-primary)',
+            }}
+          >
+            {sourceDataDate ?? 'Unknown'}
+          </span>
+          <span
+            className="font-body block mt-2"
+            style={{
+              fontSize: '0.8125rem',
+              color: 'var(--text-muted)',
+            }}
+          >
+            Latest date shown by the tracked Microsoft release-health pages
           </span>
         </div>
 

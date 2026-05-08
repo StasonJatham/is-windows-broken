@@ -48,6 +48,8 @@ function App() {
   const overall = primaryItem?.overall;
   const versions = primaryItem?.versions ?? [];
   const dataDate = primaryItem?.generatedAt ?? new Date().toISOString();
+  const sourceDataDate =
+    versions.map((version) => version.data_date).sort().at(-1) ?? null;
 
   return (
     <div
@@ -77,6 +79,7 @@ function App() {
           <ConfidenceSources
             confidence={overall.confidence}
             generatedAt={primaryItem.generatedAt}
+            sourceDataDate={sourceDataDate}
             latestPatchDay={primaryItem.patch?.patchDay ?? null}
             activeWindow={primaryItem.patch?.activeWindow ?? false}
           />
