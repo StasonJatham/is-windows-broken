@@ -1,0 +1,263 @@
+---
+import "../styles/global.css";
+
+const apiUrl = "https://api.is-windows-broken.com/api/v1/patch-status";
+const jsExample = `const response = await fetch("${apiUrl}", {
+  headers: { Accept: "application/json" },
+  cache: "no-store"
+});
+
+const data = await response.json();
+const latest = data.items
+  .slice()
+  .sort((a, b) =>
+    new Date(b.generatedAt).getTime() -
+    new Date(a.generatedAt).getTime()
+  )[0];
+
+console.log(latest.overall.status);
+console.log(latest.overall.summary);`;
+const pythonExample = `import requests
+
+response = requests.get(
+    "${apiUrl}",
+    headers={"Accept": "application/json"},
+    timeout=20,
+)
+data = response.json()
+
+latest = sorted(
+    data["items"],
+    key=lambda item: item["generatedAt"],
+    reverse=True,
+)[0]
+
+print(latest["overall"]["status"])
+print(latest["overall"]["summary"])`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>is-windows-broken.com</title>
+    <meta
+      name="description"
+      content="A minimal Patch Tuesday and Windows update risk monitor for admins."
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="is-windows-broken.com" />
+    <meta
+      property="og:description"
+      content="Should admins patch Windows right now? Latest Microsoft release-health analysis, summarized for operational rollout decisions."
+    />
+    <meta property="og:url" content="https://is-windows-broken.com" />
+    <meta property="og:image" content="https://is-windows-broken.com/is-win-broke-preview.webp" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="is-windows-broken.com" />
+    <meta
+      name="twitter:description"
+      content="Should admins patch Windows right now? Latest Microsoft release-health analysis."
+    />
+    <meta name="twitter:image" content="https://is-windows-broken.com/is-win-broke-preview.webp" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" aria-label="Site header">
+      <div>
+        <a class="brand" href="/" aria-label="is-windows-broken.com home">
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="brand-icon">
+            <rect x="3" y="4" width="18" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"></rect>
+            <path d="M8 21h8M12 17v4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          </svg>
+          <span>is-windows-broken.com</span>
+        </a>
+        <p class="tagline">Minimal Windows update risk monitor for admins.</p>
+      </div>
+      <a class="header-link" href="#api">API</a>
+    </header>
+
+    <main id="main" class="page-shell">
+      <section class="top-grid" aria-labelledby="status-word">
+        <article class="hero-card card" aria-live="polite">
+          <p class="eyebrow">Should I patch now?</p>
+          <h1 id="status-word" class="hero-word">LOADING.</h1>
+          <h2 id="status-title" class="hero-title">Fetching latest Windows update analysis.</h2>
+          <p id="status-description" class="hero-description">
+            The static page is loading live data from the public API.
+          </p>
+          <p id="status-meta" class="hero-meta">
+            Latest analysis: <span>waiting for API</span>
+          </p>
+          <p id="status-note" class="status-note" hidden></p>
+        </article>
+
+        <aside class="recommendation-card card" aria-labelledby="recommendation-heading">
+          <div class="card-heading">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 7 9 18l-5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <h2 id="recommendation-heading">Update Recommendation</h2>
+          </div>
+          <p id="recommendation-action" class="action-label">WAITING</p>
+          <p id="recommendation-action-description" class="muted">
+            Live recommendation will appear after the first API response.
+          </p>
+
+          <dl class="metric-list">
+            <div>
+              <dt>Confidence</dt>
+              <dd id="confidence-value">--</dd>
+            </div>
+            <div>
+              <dt>Patch Tuesday</dt>
+              <dd id="patch-tuesday">--</dd>
+            </div>
+            <div>
+              <dt>Patch Day</dt>
+              <dd id="patch-day">--</dd>
+            </div>
+            <div>
+              <dt>Active Window</dt>
+              <dd id="patch-window">--</dd>
+            </div>
+          </dl>
+        </aside>
+      </section>
+
+      <section class="content-section" aria-labelledby="release-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Tracked releases</p>
+            <h2 id="release-heading">Release Status</h2>
+          </div>
+          <p id="updated-at" class="section-meta">Waiting for data</p>
+        </div>
+
+        <div class="table-wrap" aria-live="polite">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Version</th>
+                <th scope="col">Status</th>
+                <th scope="col">Should Block?</th>
+                <th scope="col">Summary</th>
+                <th scope="col">Data Date</th>
+              </tr>
+            </thead>
+            <tbody id="versions-table-body">
+              <tr>
+                <td colspan="5">Loading release status...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="versions-list" class="release-list" aria-live="polite">
+          <article class="release-row">
+            <p class="release-title">Loading tracked releases...</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="content-section history-section" aria-labelledby="history-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Not telemetry</p>
+            <h2 id="history-heading">10-Day Analysis History</h2>
+          </div>
+          <p id="history-count" class="section-meta">Last cached AI analyses</p>
+        </div>
+
+        <div class="history-card card">
+          <div id="history-svg" class="history-svg" aria-hidden="true"></div>
+          <ol id="history-list" class="history-list" aria-label="Historical analysis states">
+            <li>Loading history...</li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="api" class="content-section api-section" aria-labelledby="api-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Public API</p>
+            <h2 id="api-heading">Use The Data</h2>
+          </div>
+          <p class="section-meta">Returns the last 10 cached analyses</p>
+        </div>
+        <p class="api-copy">
+          The frontend renders the newest item from the same endpoint. Keep requests simple:
+          fetch JSON, sort by <code>generatedAt</code>, and use the latest record.
+        </p>
+
+        <div class="code-stack">
+          <article class="code-card">
+            <div class="code-header">
+              <span>cURL</span>
+              <button class="copy-button" type="button" data-copy={`curl -s ${apiUrl} | jq .`}>Copy</button>
+            </div>
+            <pre><code><span class="token-command">curl</span> <span class="token-flag">-s</span> <span class="token-string">{apiUrl}</span> | <span class="token-command">jq</span> .</code></pre>
+          </article>
+
+          <article class="code-card">
+            <div class="code-header">
+              <span>JavaScript</span>
+              <button class="copy-button" type="button" data-copy={jsExample}>Copy</button>
+            </div>
+            <pre><code><span class="token-keyword">const</span> response = <span class="token-keyword">await</span> <span class="token-function">fetch</span>(<span class="token-string">"{apiUrl}"</span>, &#123;
+  headers: &#123; Accept: <span class="token-string">"application/json"</span> &#125;,
+  cache: <span class="token-string">"no-store"</span>
+&#125;);
+
+<span class="token-keyword">const</span> data = <span class="token-keyword">await</span> response.<span class="token-function">json</span>();
+<span class="token-keyword">const</span> latest = data.items
+  .<span class="token-function">slice</span>()
+  .<span class="token-function">sort</span>((a, b) =>
+    <span class="token-keyword">new</span> <span class="token-function">Date</span>(b.generatedAt).<span class="token-function">getTime</span>() -
+    <span class="token-keyword">new</span> <span class="token-function">Date</span>(a.generatedAt).<span class="token-function">getTime</span>()
+  )[0];
+
+console.<span class="token-function">log</span>(latest.overall.status);
+console.<span class="token-function">log</span>(latest.overall.summary);</code></pre>
+          </article>
+
+          <article class="code-card">
+            <div class="code-header">
+              <span>Python</span>
+              <button class="copy-button" type="button" data-copy={pythonExample}>Copy</button>
+            </div>
+            <pre><code><span class="token-keyword">import</span> requests
+
+response = requests.<span class="token-function">get</span>(
+    <span class="token-string">"{apiUrl}"</span>,
+    headers=&#123;<span class="token-string">"Accept"</span>: <span class="token-string">"application/json"</span>&#125;,
+    timeout=<span class="token-number">20</span>,
+)
+data = response.<span class="token-function">json</span>()
+
+latest = <span class="token-function">sorted</span>(
+    data[<span class="token-string">"items"</span>],
+    key=<span class="token-keyword">lambda</span> item: item[<span class="token-string">"generatedAt"</span>],
+    reverse=<span class="token-keyword">True</span>,
+)[0]
+
+<span class="token-function">print</span>(latest[<span class="token-string">"overall"</span>][<span class="token-string">"status"</span>])
+<span class="token-function">print</span>(latest[<span class="token-string">"overall"</span>][<span class="token-string">"summary"</span>])</code></pre>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Made with ♥ by the community</p>
+      <p>This site is not affiliated with Microsoft.</p>
+      <p>Analyzed from Microsoft Release Health pages with AI.</p>
+    </footer>
+
+    <script src="../scripts/status.ts"></script>
+  </body>
+</html>
