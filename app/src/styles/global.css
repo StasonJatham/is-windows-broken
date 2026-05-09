@@ -428,9 +428,10 @@ tbody tr:last-child td {
 
 .api-copy {
   max-width: 720px;
-  margin: -4px 0 18px;
+  margin: -4px auto 18px;
   color: var(--text-secondary);
   line-height: 1.65;
+  text-align: center;
 }
 
 .api-copy code {
@@ -447,6 +448,7 @@ tbody tr:last-child td {
   grid-template-columns: 1fr;
   gap: 16px;
   width: min(100%, 1020px);
+  margin-inline: auto;
 }
 
 .code-card {
@@ -455,6 +457,7 @@ tbody tr:last-child td {
   border-radius: var(--radius-lg);
   background: #10151f;
   box-shadow: var(--shadow);
+  text-align: left;
 }
 
 .code-header {
