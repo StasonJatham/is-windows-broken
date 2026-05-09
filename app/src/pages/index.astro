@@ -217,16 +217,17 @@ latest = <span class="token-function">sorted</span>(
       </section>
     </main>
 
-    <footer class="site-footer">
-      <p class="footer-disclaimer">
-        This service is informational only. Data is sourced from Microsoft release-health pages and summarized with AI. Always verify patch readiness through official Microsoft channels before deploying updates in production environments.
-      </p>
-      <p class="footer-brand">
-        Built with <span aria-hidden="true">♥</span> by Karl ·
-        <a href="https://karl.fail" target="_blank" rel="noreferrer">Blog: karl.fail</a> ·
-        <a href="https://github.com/StasonJatham/is-windows-broken" target="_blank" rel="noreferrer">GitHub</a>
-      </p>
-      <p>Not affiliated with Microsoft.</p>
+    <footer class="site-footer" aria-label="Site footer">
+      <div class="footer-card">
+        <p class="footer-kicker">Independent patch-risk summary</p>
+        <p class="footer-disclaimer">
+          is-windows-broken.com is not Microsoft, not Windows, and not affiliated with Microsoft. This site is informational only. We are not liable for failed updates, outages, data loss, or operational decisions made from this page. Always verify against official Microsoft sources before patching production systems.
+        </p>
+        <nav class="footer-links" aria-label="Footer links">
+          <a href="https://karl.fail" target="_blank" rel="noreferrer">Built by Karl</a>
+          <a href="https://github.com/StasonJatham/is-windows-broken" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
     </footer>
 
     <script src="../scripts/status.ts"></script>
