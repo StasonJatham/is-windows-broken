@@ -164,6 +164,10 @@ a:focus-visible {
   align-items: stretch;
 }
 
+.top-grid.hero-only {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .card {
   background: var(--surface-raised);
   border: 1px solid var(--border);
@@ -235,13 +239,6 @@ a:focus-visible {
   padding-left: 12px;
 }
 
-.recommendation-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 24px;
-}
-
 .card-heading {
   display: flex;
   align-items: center;
@@ -262,50 +259,10 @@ a:focus-visible {
   letter-spacing: -0.04em;
 }
 
-.action-label {
-  width: fit-content;
-  margin: 0;
-  border: 1px solid var(--status-border);
-  border-radius: 999px;
-  background: var(--status-bg);
-  color: var(--status-color);
-  padding: 9px 13px;
-  font-size: 0.85rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-}
-
 .muted {
   margin: -12px 0 0;
   color: var(--text-secondary);
   line-height: 1.6;
-}
-
-.metric-list {
-  display: grid;
-  gap: 12px;
-  margin: 0;
-}
-
-.metric-list div {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 16px;
-  align-items: baseline;
-  border-top: 1px solid var(--border);
-  padding-top: 12px;
-}
-
-.metric-list dt {
-  color: var(--text-muted);
-  font-size: 0.82rem;
-}
-
-.metric-list dd {
-  margin: 0;
-  color: var(--text-primary);
-  font-weight: 750;
-  text-align: right;
 }
 
 .content-section {

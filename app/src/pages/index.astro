@@ -80,7 +80,7 @@ print(latest["overall"]["summary"])`;
     </header>
 
     <main id="main" class="page-shell">
-      <section class="top-grid" aria-labelledby="status-word">
+      <section class="top-grid hero-only" aria-labelledby="status-word">
         <article class="hero-card card" aria-live="polite">
           <p class="eyebrow">Is Windows broken right now?</p>
           <h1 id="status-word" class="hero-word">LOADING.</h1>
@@ -93,26 +93,6 @@ print(latest["overall"]["summary"])`;
           </p>
           <p id="status-note" class="status-note" hidden></p>
         </article>
-
-        <aside class="recommendation-card card" aria-labelledby="recommendation-heading">
-          <div class="card-heading">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M20 7 9 18l-5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-            <h2 id="recommendation-heading">Update Recommendation</h2>
-          </div>
-          <p id="recommendation-action" class="action-label">WAITING</p>
-          <p id="recommendation-action-description" class="muted">
-            Live recommendation will appear after the first API response.
-          </p>
-
-          <dl class="metric-list">
-            <div>
-              <dt>Confidence</dt>
-              <dd id="confidence-value">--</dd>
-            </div>
-          </dl>
-        </aside>
       </section>
 
       <section class="content-section" aria-labelledby="release-heading">

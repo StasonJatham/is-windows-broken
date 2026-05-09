@@ -300,9 +300,6 @@ function renderStatus(data: ApiResponse, cached = false): void {
   setText("#status-title", recommendation.title);
   setText("#status-description", recommendation.description);
   setText("#status-meta span", formatDateTime(latest.generatedAt));
-  setText("#recommendation-action", recommendation.action);
-  setText("#recommendation-action-description", recommendation.actionDescription);
-  setText("#confidence-value", formatPercent(latest.overall.confidence));
   setText("#updated-at", `Latest analysis: ${formatDateTime(latest.generatedAt)}`);
   setText("#history-count", `${history.length} cached analysis${history.length === 1 ? "" : "es"}`);
 
@@ -330,9 +327,6 @@ function renderUnknownState(): void {
   setText("#status-title", "Could not fetch latest Windows update analysis.");
   setText("#status-description", "The public API did not return a usable response. Try again shortly.");
   setText("#status-meta span", "unavailable");
-  setText("#recommendation-action", "UNKNOWN");
-  setText("#recommendation-action-description", "Do not infer patch readiness from this page until data is available.");
-  setText("#confidence-value", "--");
   setText("#updated-at", "API unavailable");
   setText("#history-count", "No cached analyses");
   query<HTMLParagraphElement>("#status-note").hidden = true;
