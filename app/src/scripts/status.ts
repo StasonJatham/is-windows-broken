@@ -303,9 +303,6 @@ function renderStatus(data: ApiResponse, cached = false): void {
   setText("#recommendation-action", recommendation.action);
   setText("#recommendation-action-description", recommendation.actionDescription);
   setText("#confidence-value", formatPercent(latest.overall.confidence));
-  setText("#patch-tuesday", formatDate(latest.patch?.patchTuesday));
-  setText("#patch-day", formatDate(latest.patch?.patchDay));
-  setText("#patch-window", latest.patch ? (latest.patch.activeWindow ? "Yes" : "No") : "--");
   setText("#updated-at", `Latest analysis: ${formatDateTime(latest.generatedAt)}`);
   setText("#history-count", `${history.length} cached analysis${history.length === 1 ? "" : "es"}`);
 
@@ -336,9 +333,6 @@ function renderUnknownState(): void {
   setText("#recommendation-action", "UNKNOWN");
   setText("#recommendation-action-description", "Do not infer patch readiness from this page until data is available.");
   setText("#confidence-value", "--");
-  setText("#patch-tuesday", "--");
-  setText("#patch-day", "--");
-  setText("#patch-window", "--");
   setText("#updated-at", "API unavailable");
   setText("#history-count", "No cached analyses");
   query<HTMLParagraphElement>("#status-note").hidden = true;

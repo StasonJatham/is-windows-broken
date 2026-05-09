@@ -101,23 +101,6 @@ a:focus-visible {
   outline-offset: 3px;
 }
 
-.skip-link {
-  position: absolute;
-  left: 16px;
-  top: 16px;
-  z-index: 20;
-  transform: translateY(-140%);
-  border-radius: var(--radius-sm);
-  background: var(--text-primary);
-  color: white;
-  padding: 8px 12px;
-  text-decoration: none;
-}
-
-.skip-link:focus {
-  transform: translateY(0);
-}
-
 .site-header,
 .page-shell,
 .site-footer {
@@ -586,6 +569,27 @@ pre {
 
 .site-footer p {
   margin: 4px 0;
+}
+
+.footer-disclaimer {
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+.footer-brand {
+  margin-top: 18px;
+  color: var(--text-secondary);
+  font-weight: 650;
+}
+
+.site-footer a {
+  color: var(--text-primary);
+  text-decoration-color: var(--border-strong);
+  text-underline-offset: 3px;
+}
+
+.site-footer a:hover {
+  color: var(--status-color);
 }
 
 @media (max-width: 767px) {

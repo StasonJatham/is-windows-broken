@@ -65,8 +65,6 @@ print(latest["overall"]["summary"])`;
     <meta name="twitter:image" content="https://is-windows-broken.com/is-win-broke-preview.webp" />
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
-
     <header class="site-header" aria-label="Site header">
       <div>
         <a class="brand" href="/" aria-label="is-windows-broken.com home">
@@ -84,7 +82,7 @@ print(latest["overall"]["summary"])`;
     <main id="main" class="page-shell">
       <section class="top-grid" aria-labelledby="status-word">
         <article class="hero-card card" aria-live="polite">
-          <p class="eyebrow">Should I patch now?</p>
+          <p class="eyebrow">Is Windows broken right now?</p>
           <h1 id="status-word" class="hero-word">LOADING.</h1>
           <h2 id="status-title" class="hero-title">Fetching latest Windows update analysis.</h2>
           <p id="status-description" class="hero-description">
@@ -112,18 +110,6 @@ print(latest["overall"]["summary"])`;
             <div>
               <dt>Confidence</dt>
               <dd id="confidence-value">--</dd>
-            </div>
-            <div>
-              <dt>Patch Tuesday</dt>
-              <dd id="patch-tuesday">--</dd>
-            </div>
-            <div>
-              <dt>Patch Day</dt>
-              <dd id="patch-day">--</dd>
-            </div>
-            <div>
-              <dt>Active Window</dt>
-              <dd id="patch-window">--</dd>
             </div>
           </dl>
         </aside>
@@ -253,9 +239,15 @@ latest = <span class="token-function">sorted</span>(
     </main>
 
     <footer class="site-footer">
-      <p>Made with ♥ by the community</p>
-      <p>This site is not affiliated with Microsoft.</p>
-      <p>Analyzed from Microsoft Release Health pages with AI.</p>
+      <p class="footer-disclaimer">
+        This service is informational only. Data is sourced from Microsoft release-health pages and summarized with AI. Always verify patch readiness through official Microsoft channels before deploying updates in production environments.
+      </p>
+      <p class="footer-brand">
+        Built with <span aria-hidden="true">♥</span> by Karl ·
+        <a href="https://karl.fail" target="_blank" rel="noreferrer">Blog: karl.fail</a> ·
+        <a href="https://github.com/StasonJatham/is-windows-broken" target="_blank" rel="noreferrer">GitHub</a>
+      </p>
+      <p>Not affiliated with Microsoft.</p>
     </footer>
 
     <script src="../scripts/status.ts"></script>
