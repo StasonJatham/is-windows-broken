@@ -25,6 +25,19 @@ export type OverallAssessment = {
   should_block_patch: boolean;
   summary: string;
   confidence: number;
+  top_action?: "proceed" | "proceed_with_caution" | "delay_and_review" | null;
+  recommended_action?: string;
+  deployment_notes?: DeploymentNote[];
+  unresolved_count?: number;
+  resolved_or_mitigated_count?: number;
+  latest_data_date?: string | null;
+};
+
+export type DeploymentNote = {
+  level: "info" | "caution" | "blocker";
+  title: string;
+  detail: string;
+  url?: string;
 };
 
 export type VersionAssessment = {
@@ -37,7 +50,7 @@ export type VersionAssessment = {
 
 const DEFAULT_API_URL = "https://api.is-windows-broken.com/api/v1/patch-status";
 const API_URL = import.meta.env.PUBLIC_API_URL?.trim() || DEFAULT_API_URL;
-const CACHE_KEY = "last-status-response";
+const CACHE_KEY = "last-status-response-v2";
 
 const statusColors: Record<Status, string> = {
   GREEN: "#3fa36b",
@@ -92,11 +105,46 @@ function byOldest(a: AnalysisRun, b: AnalysisRun): number {
 }
 
 function getLatest(data: ApiResponse): AnalysisRun {
-  return data.items.slice().sort(byNewest)[0];
+  return sanitizeRun(data.items.slice().sort(byNewest)[0]);
 }
 
 function getHistory(data: ApiResponse): AnalysisRun[] {
-  return data.items.slice().sort(byOldest).slice(-10);
+  return data.items.slice().sort(byOldest).slice(-10).map(sanitizeRun);
+}
+
+function sanitizeVersionSummary(version: VersionAssessment, overall: OverallAssessment): VersionAssessment {
+  const summary = String(version.summary || "").trim();
+
+  if (version.status !== "YELLOW") {
+    return { ...version, summary };
+  }
+
+  if (!/no active issues/i.test(summary)) {
+    return { ...version, summary };
+  }
+
+  const fallback = /mitigated/i.test(overall.summary)
+    ? "Mitigated issue requires caution."
+    : "Caution item requires staged rollout validation.";
+
+  return {
+    ...version,
+    summary: fallback
+  };
+}
+
+function sanitizeRun(run: AnalysisRun): AnalysisRun {
+  const notes = Array.isArray(run.overall.deployment_notes) ? run.overall.deployment_notes : [];
+  return {
+    ...run,
+    overall: {
+      ...run.overall,
+      deployment_notes: notes.filter((note) => note && typeof note.title === "string" && typeof note.detail === "string")
+    },
+    versions: Array.isArray(run.versions)
+      ? run.versions.map((version) => sanitizeVersionSummary(version, run.overall))
+      : []
+  };
 }
 
 function query<T extends HTMLElement>(selector: string): T {
@@ -161,6 +209,57 @@ function makeStatusPill(status: Status): HTMLSpanElement {
   pill.style.setProperty("--pill-bg", status === "GREEN" ? "#eaf7ef" : status === "YELLOW" ? "#fff7df" : "#fff0ef");
   pill.style.setProperty("--pill-border", status === "GREEN" ? "#c8ead5" : status === "YELLOW" ? "#f4dda3" : "#f3c7c4");
   return pill;
+}
+
+function actionLabel(action?: OverallAssessment["top_action"]): string {
+  if (action === "delay_and_review") return "Delay and review";
+  if (action === "proceed_with_caution") return "Stage first";
+  return "Proceed";
+}
+
+function renderRolloutDetails(run: AnalysisRun): void {
+  const action = query<HTMLParagraphElement>("#rollout-action");
+  const signal = query<HTMLParagraphElement>("#signal-summary");
+  const notes = query<HTMLUListElement>("#deployment-notes");
+  const source = query<HTMLParagraphElement>("#source-freshness");
+  const overall = run.overall;
+  const recommendation = getRecommendation(run);
+  const deploymentNotes = overall.deployment_notes ?? [];
+
+  action.textContent = overall.recommended_action?.trim() || recommendation.actionDescription;
+  signal.textContent = `${actionLabel(overall.top_action)}. Active blockers: ${overall.unresolved_count ?? 0}. Resolved or mitigated context: ${overall.resolved_or_mitigated_count ?? deploymentNotes.length}.`;
+  source.textContent = `Latest analysis: ${formatDateTime(run.generatedAt)}. Source data: ${formatDate(overall.latest_data_date)}.`;
+  notes.replaceChildren();
+
+  if (deploymentNotes.length === 0) {
+    const item = document.createElement("li");
+    item.className = "note-item note-item-info";
+    item.textContent = "No active Microsoft release-health blockers were returned for the tracked releases.";
+    notes.append(item);
+    return;
+  }
+
+  for (const note of deploymentNotes.slice(0, 4)) {
+    const item = document.createElement("li");
+    item.className = `note-item note-item-${note.level}`;
+
+    const title = document.createElement("strong");
+    title.textContent = note.title;
+
+    const detail = document.createElement("span");
+    detail.textContent = note.detail;
+
+    item.append(title, detail);
+    if (note.url) {
+      const link = document.createElement("a");
+      link.href = note.url;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.textContent = "Microsoft source";
+      item.append(link);
+    }
+    notes.append(item);
+  }
 }
 
 function renderVersions(versions: VersionAssessment[]): void {
@@ -306,6 +405,7 @@ function renderStatus(data: ApiResponse, cached = false): void {
   }
 
   renderVersions(latest.versions);
+  renderRolloutDetails(latest);
   renderHistory(history);
 }
 
@@ -321,6 +421,10 @@ function renderUnknownState(): void {
   setText("#status-description", "The public API did not return a usable response. Try again shortly.");
   setText("#status-meta span", "unavailable");
   setText("#history-count", "No cached analyses");
+  setText("#rollout-action", "No live rollout guidance is available.");
+  setText("#signal-summary", "API response unavailable.");
+  setText("#source-freshness", "Latest analysis unavailable.");
+  query<HTMLUListElement>("#deployment-notes").replaceChildren();
   query<HTMLParagraphElement>("#status-note").hidden = true;
 }
 
@@ -343,7 +447,10 @@ function writeCache(data: ApiResponse): void {
 
 async function loadStatus(): Promise<void> {
   try {
-    const response = await fetch(API_URL, {
+    const requestUrl = new URL(API_URL);
+    requestUrl.searchParams.set("ts", String(Date.now()));
+
+    const response = await fetch(requestUrl.toString(), {
       headers: {
         Accept: "application/json"
       },

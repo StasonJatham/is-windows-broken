@@ -95,6 +95,30 @@ print(latest["overall"]["summary"])`;
         </article>
       </section>
 
+      <section class="content-section rollout-section" aria-labelledby="rollout-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Rollout guidance</p>
+            <h2 id="rollout-heading">Admin Detail</h2>
+          </div>
+          <p id="source-freshness" class="section-meta">Waiting for source data</p>
+        </div>
+
+        <div class="rollout-grid">
+          <article class="rollout-card card">
+            <p class="detail-label">Action</p>
+            <p id="rollout-action" class="rollout-action">Loading rollout guidance...</p>
+            <p id="signal-summary" class="signal-summary">Loading signal summary...</p>
+          </article>
+          <article class="rollout-card card">
+            <p class="detail-label">Context</p>
+            <ul id="deployment-notes" class="deployment-notes" aria-live="polite">
+              <li class="note-item note-item-info">Loading Microsoft release-health context...</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
       <section class="content-section" aria-labelledby="release-heading">
         <div class="section-heading">
           <div>
