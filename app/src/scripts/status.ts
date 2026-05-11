@@ -199,13 +199,7 @@ function renderVersions(versions: VersionAssessment[]): void {
     const summary = document.createElement("td");
     summary.textContent = version.summary;
 
-    const dataDate = document.createElement("td");
-    const time = document.createElement("time");
-    time.dateTime = version.data_date;
-    time.textContent = formatDate(version.data_date);
-    dataDate.append(time);
-
-    row.append(name, status, block, summary, dataDate);
+    row.append(name, status, block, summary);
     tbody.append(row);
 
     const article = document.createElement("article");
@@ -222,7 +216,7 @@ function renderVersions(versions: VersionAssessment[]): void {
 
     const meta = document.createElement("p");
     meta.className = "release-meta";
-    meta.textContent = `${statusLabel(version.status)} | Block rollout: ${version.should_block_patch ? "Yes" : "No"} | Data date: ${formatDate(version.data_date)}`;
+    meta.textContent = `${statusLabel(version.status)} | Block rollout: ${version.should_block_patch ? "Yes" : "No"}`;
 
     const text = document.createElement("p");
     text.className = "release-summary";
