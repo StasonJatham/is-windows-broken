@@ -125,12 +125,30 @@ print(latest["overall"]["summary"])`;
     })}></script>
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
-      "@type": "WebApplication",
+      "@type": ["SoftwareApplication", "WebApplication"],
       name: "is-windows-broken.com",
+      alternateName: "is-windows-broken",
       url: siteUrl,
       applicationCategory: "BusinessApplication",
+      applicationSubCategory: "Windows Patch Status Monitor",
       operatingSystem: "Any",
-      description: "A minimal Windows update risk monitor that summarizes the latest Microsoft release-health analysis for patch rollout decisions."
+      isAccessibleForFree: true,
+      browserRequirements: "Requires JavaScript. Works in modern browsers.",
+      description: "A minimal Windows update risk monitor that summarizes the latest Microsoft release-health analysis for patch rollout decisions.",
+      image: ogImageUrl,
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+        availability: "https://schema.org/InStock"
+      },
+      featureList: [
+        "Windows patch rollout status",
+        "Patch Tuesday risk summary",
+        "Per-release Windows status",
+        "Cached public API",
+        "Release-health monitoring"
+      ]
     })}></script>
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
