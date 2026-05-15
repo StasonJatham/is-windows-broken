@@ -1,20 +1,25 @@
-# is-windows-broken
+# is-windows-broken.com
 
-[![API Status](https://img.shields.io/website?url=https%3A%2F%2Fapi.is-windows-broken.com%2Fapi%2Fv1%2Fpatch-status&label=API)](https://api.is-windows-broken.com/api/v1/patch-status)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fis-windows-broken.com&label=website)](https://is-windows-broken.com)
+[![API](https://img.shields.io/website?url=https%3A%2F%2Fapi.is-windows-broken.com%2Fapi%2Fv1%2Fpatch-status&label=api)](https://api.is-windows-broken.com/api/v1/patch-status)
+![Astro](https://img.shields.io/badge/Astro-6-FF5D01?logo=astro&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
+![Free API](https://img.shields.io/badge/API-free-16a34a)
 
-Patch Tuesday readiness for Windows Server and Windows 11. `is-windows-broken` tracks Microsoft release-health data and publishes a cached go/no-go view for deciding whether it is safe to patch.
+Free Windows patch and release-health status lookup for admins. `is-windows-broken.com` tracks Microsoft release-health signals and publishes a cached go/no-go view for deciding whether Windows Server and Windows 11 rollout looks safe, cautionary, or blocked.
 
-![is-windows-broken preview](./app/public/is-win-broke-preview.webp)
+![is-windows-broken.com social preview](https://is-windows-broken.com/og-image.jpg)
 
-## Website
+No account. No API key. Fast public status checks.
+
+## Live Service
 
 - Website: [https://is-windows-broken.com](https://is-windows-broken.com)
-- API: [https://api.is-windows-broken.com/api/v1/patch-status](https://api.is-windows-broken.com/api/v1/patch-status)
+- Public API: [https://api.is-windows-broken.com/api/v1/patch-status](https://api.is-windows-broken.com/api/v1/patch-status)
 
-## What It Does
+## What It Tracks
 
-The site displays the newest cached patch assessment for tracked Windows releases:
+The site displays the newest cached patch assessment for tracked Windows releases, including:
 
 - overall patch status
 - short operational summary
@@ -23,9 +28,11 @@ The site displays the newest cached patch assessment for tracked Windows release
 - analysis run date
 - Microsoft source-page date
 
-The public API returns the latest 10 cached runs. The frontend renders the newest entry.
+Tracked releases currently include:
 
-Tracked releases currently include Windows Server 2022, Windows Server 2025, and major Windows 11 release-health pages.
+- Windows Server 2022
+- Windows Server 2025
+- major Windows 11 release-health pages
 
 ## Public API
 
@@ -39,7 +46,7 @@ Example:
 curl -s https://api.is-windows-broken.com/api/v1/patch-status | jq
 ```
 
-Response shape:
+Example response shape:
 
 ```json
 {
@@ -48,27 +55,12 @@ Response shape:
   "items": [
     {
       "generatedAt": "2026-05-08T08:04:30.018Z",
-      "patch": {
-        "berlinDate": "2026-05-08",
-        "patchTuesday": "2026-05-12",
-        "patchDay": "2026-05-20",
-        "activeWindow": false
-      },
       "overall": {
         "status": "GREEN",
         "should_block_patch": false,
         "summary": "No active blocker issues detected.",
         "confidence": 0.97
-      },
-      "versions": [
-        {
-          "version": "Windows Server 2022",
-          "status": "GREEN",
-          "should_block_patch": false,
-          "summary": "No active known issues.",
-          "data_date": "2026-05-08"
-        }
-      ]
+      }
     }
   ]
 }
@@ -76,9 +68,19 @@ Response shape:
 
 ## How It Works
 
-The backend periodically fetches Microsoft Windows release-health pages and supplemental Windows admin news, summarizes the evidence through an asynchronous Batch API workflow, and stores the result as a small cached JSON history.
+The backend periodically fetches Microsoft Windows release-health pages and related Windows admin sources, summarizes the evidence through an asynchronous batch workflow, and stores the result as a cached JSON history.
 
-The public website never calls the model directly. It only reads the cached API response, which keeps the page fast, stable, and cheap to serve.
+The public site never calls a model directly. It only reads the cached API response, which keeps the page fast, predictable, and cheap to serve.
+
+## Frontend
+
+This repository contains the public frontend for `is-windows-broken.com`.
+
+- Framework: Astro 6
+- Language: TypeScript
+- Deployment target: static hosting / edge CDN
+
+The backend API is served separately at [https://api.is-windows-broken.com](https://api.is-windows-broken.com).
 
 ## Local Development
 
@@ -98,5 +100,19 @@ npm run preview
 
 ## Notes
 
-- This repo contains the public frontend only.
+- This repository contains the public frontend only.
 - The API intentionally exposes a scrubbed public response, not internal batch or model metadata.
+- Always validate patching decisions against official Microsoft documentation and your own testing.
+
+## Related Services
+
+- [isbadip.com](https://isbadip.com) — malicious IP and domain reputation lookup
+- [isproxy.org](https://isproxy.org) — proxy, VPN, Tor, hosting, and residential-proxy lookup
+
+## Author
+
+Built by Karl — [karl.fail](https://karl.fail) · [karlcom.de](https://karlcom.de)
+
+## License
+
+MIT
