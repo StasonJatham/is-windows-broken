@@ -1,0 +1,15 @@
+# is-windows-broken.com
+
+> Free Windows patch status lookup for admins. Check the latest Patch Tuesday and release-health analysis to decide whether Windows rollout looks safe, cautionary, or blocked.
+
+## API
+- Endpoint: https://api.is-windows-broken.com/api/v1/patch-status
+- Method: GET
+- Auth: none, free, no key required
+- Response: JSON. Includes recent cached analyses, overall status, rollout guidance, and per-release summaries.
+
+## Examples
+- https://api.is-windows-broken.com/api/v1/patch-status
+
+## Notes
+The site summarizes public Microsoft release-health information into operational guidance. Always validate patching decisions against official Microsoft documentation and your own testing.

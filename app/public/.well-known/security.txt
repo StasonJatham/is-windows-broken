@@ -1,0 +1,6 @@
+Contact: mailto:hallo@karlcom.de
+Expires: 2027-05-15T00:00:00.000Z
+Preferred-Languages: en, de
+Canonical: https://is-windows-broken.com/.well-known/security.txt
+Policy: https://is-windows-broken.com/
+Acknowledgments: https://karl.fail

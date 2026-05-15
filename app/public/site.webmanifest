@@ -1,0 +1,12 @@
+{
+  "id": "/",
+  "name": "is-windows-broken.com",
+  "short_name": "is-windows-broken",
+  "description": "Minimal Windows update risk monitor for admins.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": []
+}

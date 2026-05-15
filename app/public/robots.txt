@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
+Host: is-windows-broken.com
 Sitemap: https://is-windows-broken.com/sitemap.xml

@@ -1,0 +1,7 @@
+/* TEAM */
+Owner: Karl
+Site: https://is-windows-broken.com
+GitHub: https://github.com/StasonJatham/is-windows-broken
+
+/* THANKS */
+Built from public Microsoft release-health data and local automation.
